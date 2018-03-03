@@ -1,59 +1,98 @@
-set nocompatible             " Required by Vundle 
-filetype off                 " Required by Vundle 
+"Vim-plug plugin systm begin
+call plug#begin('~/.vim/plugged')
 
-" set the runtime path to include Vundle and initialize 
-set rtp+=~/.vim/bundle/Vundle.vim 
+" Color schemes
+Plug 'tomasr/molokai'
+Plug 'morhetz/gruvbox'
 
-call vundle#begin() 
-Plugin 'VundleVim/Vundle.vim' 
-Plugin 'tmhedberg/SimpylFold' 
-Plugin 'vim-scripts/indentpython.vim' 
-Plugin 'altercation/vim-colors-solarized' 
-Plugin 'Lokaltog/vim-powerline' 
-Plugin 'scrooloose/syntastic' 
-call vundle#end()            " Required by Vundle 
-filetype plugin indent on    " Required by Vundle 
+" Simpyl Fold
+Plug 'tmhedberg/SimpylFold'
 
-syntax enable
-set background=dark 
-colorscheme solarized 
+" Python PEP8 indent
+Plug 'Vimjas/vim-python-pep8-indent'
 
-au BufNewFile,BufRead *.py,*.js set tabstop=4 softtabstop=4 shiftwidth=4 
+" Vim Syntastic
+Plug 'vim-syntastic/syntastic'
 
-au BufNewFile,BufRead *.html,*.css,*.yml,*.yaml,*.txt,*.rst set tabstop=2 
-       \ softtabstop=2 
-       \ shiftwidth=2 
+" NERDTree
+Plug 'scrooloose/nerdtree'
 
-"splitt && windows navigations 
-set splitbelow 
-set splitright 
-nnoremap <C-J> <C-W><C-J> 
-nnoremap <C-K> <C-W><C-K> 
-nnoremap <C-L> <C-W><C-L> 
-nnoremap <C-H> <C-W><C-H> 
+" Airline
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
-" Enable folding 
-set foldmethod=indent 
-set foldlevel=99 
-nnoremap <space> za 
-let g:SimpylFold_docstring_preview=1 
+" Vim-fugitive
+Plug 'tpope/vim-fugitive'
 
-" disable cursor lighting 
-set gcr=a:block-blinkon0 
-" show status bar 
-set laststatus=2 
-" show cursor current position 
-set ruler 
-" show line number 
-set number 
-" highlight current row/column 
-set cursorline 
-set cursorcolumn 
+" YouCompleteMe
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py --js-completer --go-completer' }
 
-set textwidth=79 
-set expandtab 
-set autoindent 
-set fileformat=unix 
+" Initialize plugin system
+call plug#end()
+
+" set color scheme
+set termguicolors
+colorscheme gruvbox
+
+" set fileformat, textwidth and tabs
+set textwidth=79
+set expandtab
+set autoindent
+set fileformat=unix
+
+" programming languages individual settings
+au BufNewFile,BufRead *.py set 
+                        \ tabstop=4 
+                        \ softtabstop=4 
+                        \ shiftwidth=4
+
+au BufNewFile,BufRead *.js,*.html,*.css,*.rst set 
+                        \ tabstop=2 
+                        \ softtabstop=2 
+                        \ shiftwidth=2
+
+" flagging unnecessary whitespace
+" au BufNewFile,BufRead *.py match BadWhitespace /\s\+$/
+
+" show line numbers
+set nu
+
+" set folding
+set foldmethod=indent
+set foldlevel=99
+nnoremap <space> za
+let g:SimpylFold_docstring_preview = 1
+
+" show the matching part of the pair for [], {} and ()
+set showmatch
+
+" set fileencoding
 set encoding=utf-8 
 set fileencoding=utf-8
 
+" enable split
+set splitbelow
+set splitright
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" vim-plug post settings
+let g:ycm_python_binary_path = 'python3'
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_python_python_exe = 'python3'
+
+"autocmd vimenter * NERDTree
+map <C-n> :NERDTreeToggle<CR>
+let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
+
+" Run python code in vim
+autocmd FileType python nnoremap <buffer> <F5> :!clear;python3 %<cr>
